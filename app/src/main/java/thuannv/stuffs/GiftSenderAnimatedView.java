@@ -1,11 +1,17 @@
 package thuannv.stuffs;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
+import com.squareup.picasso.Picasso;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -13,17 +19,38 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @since 12/03/2018
  */
 
-public class GiftSenderAnimatedView extends RelativeLayout {
+public class GiftSenderAnimatedView extends FrameLayout {
 
-    private CircleImageView mSenderAvatar;
+    @BindView(R.id.avatar_container)
+    FrameLayout mAvatarContainer;
 
-    private ImageView mSenderNameFlashLight;
+    @BindView(R.id.avatar)
+    CircleImageView mAvatar;
 
-    private ImageView mReceivingTextFlashLight;
+    @BindView(R.id.avatar_flash_light)
+    ImageView mAvatarFlashLight;
 
-    private OutlineTextView mSenderUserName;
+    @BindView(R.id.display_name_container)
+    FrameLayout mDisplayNameContainer;
 
-    private OutlineTextView mReceivingGiftText;
+    @BindView(R.id.display_name)
+    OutlineTextView mDisplayName;
+
+    @BindView(R.id.display_name_flash_light)
+    ImageView mDisplayNameFlashLight;
+
+    @BindView(R.id.display_gift_name_container)
+    FrameLayout mDisplayGiftNameContainer;
+
+    @BindView(R.id.display_gift_name)
+    OutlineTextView mDisplayGiftName;
+
+    @BindView(R.id.display_gift_name_flash_light)
+    ImageView mDisplayGiftNameFlashLight;
+
+    private int mAvatarSize;
+
+    private ViewAnimationController<GiftSenderAnimatedView> mAnimatorController;
 
     public GiftSenderAnimatedView(Context context) {
         super(context);
@@ -36,24 +63,58 @@ public class GiftSenderAnimatedView extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        initViews(context);
+        View view = inflate(context, R.layout.layout_animated_gift_sender, this);
+        ButterKnife.bind(this, view);
+
+        final Resources res = context.getResources();
+        mAvatarSize = res.getDimensionPixelSize(R.dimen.display_avatar_size);
+
+        final Picasso picasso = Picasso.get();
+        picasso.load(R.drawable.flash_light)/*.resize(w, h)*/.into(mAvatarFlashLight);
+        picasso.load(R.drawable.flash_light)/*.resize(w, h)*/.into(mDisplayNameFlashLight);
+        picasso.load(R.drawable.flash_light)/*.resize(w, h)*/.into(mDisplayGiftNameFlashLight);
+
+        mAvatar.setVisibility(View.VISIBLE);
+        mAvatarFlashLight.setVisibility(View.VISIBLE);
+
+        mAvatarFlashLight.setAlpha(0.0f);
+        mAvatarFlashLight.setVisibility(View.VISIBLE);
+
+        mDisplayNameFlashLight.setAlpha(0.0f);
+        mDisplayNameFlashLight.setVisibility(View.VISIBLE);
+
+        mDisplayGiftNameFlashLight.setAlpha(0.0f);
+        mDisplayGiftNameFlashLight.setVisibility(View.VISIBLE);
+
+        mAvatar.setAlpha(0.0f);
+        mDisplayName.setAlpha(0.0f);
+        mDisplayGiftName.setAlpha(0.0f);
     }
 
-    private void initViews(Context context) {
-        inflate(context, R.layout.layout_animated_gift_sender, this);
-        mSenderAvatar = (CircleImageView) findViewById(R.id.sender_avatar);
-        mSenderNameFlashLight = (ImageView) findViewById(R.id.sender_flash_light);
-        mSenderUserName = (OutlineTextView) findViewById(R.id.sender_name);
-        mReceivingTextFlashLight = (ImageView) findViewById(R.id.receiving_gift_flash_light);
-        mReceivingGiftText = (OutlineTextView) findViewById(R.id.receiving_gift_text);
-
-        mSenderAvatar.setVisibility(GONE);
-        mSenderUserName.setVisibility(GONE);
-        mSenderNameFlashLight.setVisibility(GONE);
-        mReceivingTextFlashLight.setVisibility(GONE);
-        mReceivingGiftText.setVisibility(GONE);
+    public void setGiftInfo(GiftInfo gift) {
+        if (gift != null) {
+            //Picasso.get().load(gift.getSenderAvatar()).resize(mAvatarSize, mAvatarSize).into(mAvatar);
+            Picasso.get().load(R.drawable.hot_girl_1).resize(mAvatarSize, mAvatarSize).into(mAvatar);
+            mDisplayName.setText(gift.getSenderName());
+            mDisplayGiftName.setText(gift.getGiftName());
+        }
     }
 
-    void setupAnimations() {
+    public void setController(ViewAnimationController<GiftSenderAnimatedView> controller) {
+        mAnimatorController = controller;
+    }
+
+    public void animateGiftReceiving() {
+        if (mAnimatorController != null) {
+            mAnimatorController.animate(this);
+        }
+    }
+
+    public ImageView getAvatarFlashLight() {
+        return mAvatarFlashLight;
+    }
+
+    public CircleImageView getAvatar() {
+        return mAvatar;
     }
 }
