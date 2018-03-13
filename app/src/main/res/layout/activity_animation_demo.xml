@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context="thuannv.stuffs.AnimationDemoActivity">
+
+    <!-- Avatar container -->
+    <FrameLayout
+        android:id="@+id/avatar_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/animation_container_size">
+
+        <!-- Avatar -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatar"
+            android:layout_width="@dimen/display_avatar_size"
+            android:layout_height="@dimen/display_avatar_size"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            app:civ_border_color="#ffde85"
+            app:civ_border_width="2.4dp"
+            android:visibility="visible"
+            tools:src="@drawable/background" />
+
+        <!-- Avatar flash light -->
+        <ImageView
+            android:id="@+id/avatar_flash_light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"
+            tools:src="@drawable/flash_light"
+            />
+    </FrameLayout>
+
+    <!-- Display name container -->
+
+    <!-- Display gift name container -->
+    <FrameLayout
+        android:id="@+id/display_gift_name_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/animation_container_size"
+        android:layout_marginTop="@dimen/display_gift_name_margin_top"
+        android:visibility="visible">
+
+        <!-- Display name flash light -->
+        <ImageView
+            android:id="@+id/display_gift_name_flash_light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"
+            tools:src="@drawable/flash_light" />
+
+        <!-- Display name -->
+        <thuannv.stuffs.OutlineTextView
+            android:id="@+id/display_gift_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:shadowColor="#b6f4a300"
+            android:shadowRadius="5"
+            android:singleLine="true"
+            android:text="Tặng 1 Pháo Tết"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:stroke_color="#eea800"
+            app:stroke_width="0.3dp"
+            tools:text="Tặng 1 Pháo Tết"
+            android:visibility="visible"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/display_name_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/animation_container_size"
+        android:layout_marginTop="@dimen/display_name_margin_top"
+        android:visibility="visible">
+
+        <!-- Display name flash light -->
+        <ImageView
+            android:id="@+id/display_name_flash_light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"
+            tools:src="@drawable/flash_light" />
+
+        <!-- Display name -->
+        <thuannv.stuffs.OutlineTextView
+            android:id="@+id/display_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:shadowColor="#b6f4a300"
+            android:shadowRadius="5"
+            android:singleLine="true"
+            android:text="Bi Khánh An"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:visibility="visible"
+            app:stroke_color="#eea800"
+            app:stroke_width="0.3dp"
+            tools:text="Bi Khánh An" />
+    </FrameLayout>
+</FrameLayout>

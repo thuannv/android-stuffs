@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="display_avatar_size">64dp</dimen>
+    <dimen name="animation_container_size">160dp</dimen>
+    <dimen name="display_name_margin_top">60dp</dimen>
+    <dimen name="display_gift_name_margin_top">100dp</dimen>
+</resources>
