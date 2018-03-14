@@ -2,6 +2,7 @@ package thuannv.stuffs;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -17,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.cover)
     ImageView mCover;
 
-    private GiftSenderAnimationController mController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
         receivingGiftInfo.setSenderName("Nguyễn Giang Đông");
         receivingGiftInfo.setSenderAvatar(ImageSource.fromResource(R.drawable.hot_girl_1));
 
-        mController = new GiftSenderAnimationController();
-        mAnimatedView.setController(mController);
+        mAnimatedView.setController(new GiftSenderAnimationController());
         mAnimatedView.setGiftInfo(receivingGiftInfo);
         mAnimatedView.animateReceivingGift();
     }
@@ -43,5 +42,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    public void play(View view) {
+        mAnimatedView.animateReceivingGift();
     }
 }

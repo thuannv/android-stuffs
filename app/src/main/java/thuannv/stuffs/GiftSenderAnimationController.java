@@ -49,7 +49,7 @@ public final class GiftSenderAnimationController implements ViewAnimationControl
         return combineAnimator;
     }
 
-    public void animate(final GiftSenderAnimatedView view, Animator.AnimatorListener listener) {
+    public Animator animate(final GiftSenderAnimatedView view, Animator.AnimatorListener listener) {
         if (view != null) {
             final AnimatorSet compoundAnimator = new AnimatorSet();
             final Animator f1 = animateFlashLightAndViewDisplay(view.mAvatarFlashLight, view.mAvatar);
@@ -70,6 +70,8 @@ public final class GiftSenderAnimationController implements ViewAnimationControl
             }
             compoundAnimator.playTogether(f1, f2, f3);
             compoundAnimator.start();
+            return compoundAnimator;
         }
+        return null;
     }
 }

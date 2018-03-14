@@ -8,5 +8,5 @@ import android.animation.Animator;
  */
 
 public interface ViewAnimationController<V> {
-    void animate(V view, Animator.AnimatorListener listener);
+    Animator animate(V view, Animator.AnimatorListener listener);
 }

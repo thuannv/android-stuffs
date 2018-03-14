@@ -52,6 +52,8 @@ public class GiftSenderAnimatedView extends FrameLayout {
 
     private int mAvatarSize;
 
+    private Animator mPlayingAnimation;
+
     private ViewAnimationController<GiftSenderAnimatedView> mAnimatorController;
 
     private boolean mIsLayoutPassed = false;
@@ -59,6 +61,7 @@ public class GiftSenderAnimatedView extends FrameLayout {
     private final Animator.AnimatorListener ANIMATION_LISTENER = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(Animator animation) {
+            mPlayingAnimation = null;
             GiftSenderAnimatedView.this.setVisibility(INVISIBLE);
         }
     };
@@ -66,9 +69,7 @@ public class GiftSenderAnimatedView extends FrameLayout {
     private final Runnable ANIMATOR = new Runnable() {
         @Override
         public void run() {
-            if (mAnimatorController != null) {
-                mAnimatorController.animate(GiftSenderAnimatedView.this, ANIMATION_LISTENER);
-            }
+            animateInternal();
         }
     };
 
@@ -90,6 +91,7 @@ public class GiftSenderAnimatedView extends FrameLayout {
 
     @Override
     protected void onDetachedFromWindow() {
+        cancelAnimation();
         removeCallbacks(ANIMATOR);
         super.onDetachedFromWindow();
     }
@@ -130,7 +132,7 @@ public class GiftSenderAnimatedView extends FrameLayout {
             Picasso.get().load(source.getFile()).resize(mAvatarSize, mAvatarSize).into(mAvatar);
         } else if (source.isUri()) {
             Picasso.get().load(source.getUri()).resize(mAvatarSize, mAvatarSize).into(mAvatar);
-        } else if(source.isLocalResourceId()) {
+        } else if (source.isLocalResourceId()) {
             Picasso.get().load(source.getResourceId()).resize(mAvatarSize, mAvatarSize).into(mAvatar);
         }
     }
@@ -147,10 +149,26 @@ public class GiftSenderAnimatedView extends FrameLayout {
         mAnimatorController = controller;
     }
 
+    private void cancelAnimation() {
+        if (mPlayingAnimation != null) {
+            mPlayingAnimation.cancel();
+            mPlayingAnimation = null;
+        }
+    }
+
+    private void animateInternal() {
+        cancelAnimation();
+        setVisibility(View.VISIBLE);
+        if (mAnimatorController != null) {
+            mPlayingAnimation = mAnimatorController.animate(this, ANIMATION_LISTENER);
+        }
+    }
+
     public void animateReceivingGift() {
         if (mAnimatorController != null) {
+            removeCallbacks(ANIMATOR);
             if (mIsLayoutPassed) {
-                mAnimatorController.animate(this, ANIMATION_LISTENER);
+                post(ANIMATOR);
             } else {
                 postDelayed(ANIMATOR, 1000);
             }
