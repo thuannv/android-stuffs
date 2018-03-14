@@ -38,25 +38,27 @@ public final class GiftSenderAnimationController implements ViewAnimationControl
     }
 
 
-    private Animator animateFlashAndViewDisplayTogether(View flash, View element) {
+    private Animator animateFlashLightAndViewDisplay(View flash, View element) {
+        final AnimatorSet combineAnimator = new AnimatorSet();
         final Animator flashAnimator = animateFlashlight(flash);
         final Animator elementAnimator = animateViewDisplay(element);
         elementAnimator.setStartDelay(100);
 
-        final AnimatorSet combineAnimator = new AnimatorSet();
         combineAnimator.playTogether(flashAnimator, elementAnimator);
         return combineAnimator;
     }
 
     public void animate(GiftSenderAnimatedView view) {
-        final Animator f1 = animateFlashAndViewDisplayTogether(view.mAvatarFlashLight, view.mAvatar);
-        final Animator f2 = animateFlashAndViewDisplayTogether(view.mDisplayNameFlashLight, view.mDisplayName);
-        final  Animator f3 = animateFlashAndViewDisplayTogether(view.mDisplayGiftNameFlashLight, view.mDisplayGiftName);
-        f2.setStartDelay(200);
-        f3.setStartDelay(400);
+        if (view != null) {
+            final AnimatorSet compoundAnimator = new AnimatorSet();
+            final Animator f1 = animateFlashLightAndViewDisplay(view.mAvatarFlashLight, view.mAvatar);
+            final Animator f2 = animateFlashLightAndViewDisplay(view.mDisplayNameFlashLight, view.mDisplayName);
+            final Animator f3 = animateFlashLightAndViewDisplay(view.mDisplayGiftNameFlashLight, view.mDisplayGiftName);
+            f2.setStartDelay(200);
+            f3.setStartDelay(400);
 
-        final AnimatorSet finalSet = new AnimatorSet();
-        finalSet.playTogether(f1, f2, f3);
-        finalSet.start();
+            compoundAnimator.playTogether(f1, f2, f3);
+            compoundAnimator.start();
+        }
     }
 }

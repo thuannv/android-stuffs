@@ -52,6 +52,17 @@ public class GiftSenderAnimatedView extends FrameLayout {
 
     private ViewAnimationController<GiftSenderAnimatedView> mAnimatorController;
 
+    private boolean mIsLayoutPassed = false;
+
+    private final Runnable ANIMATOR = new Runnable() {
+        @Override
+        public void run() {
+            if (mAnimatorController != null) {
+                mAnimatorController.animate(GiftSenderAnimatedView.this);
+            }
+        }
+    };
+
     public GiftSenderAnimatedView(Context context) {
         super(context);
         init(context, null);
@@ -60,6 +71,18 @@ public class GiftSenderAnimatedView extends FrameLayout {
     public GiftSenderAnimatedView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        mIsLayoutPassed = true;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        removeCallbacks(ANIMATOR);
+        super.onDetachedFromWindow();
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -91,12 +114,23 @@ public class GiftSenderAnimatedView extends FrameLayout {
         mDisplayGiftName.setAlpha(0.0f);
     }
 
-    public void setGiftInfo(GiftInfo gift) {
-        if (gift != null) {
-            //Picasso.get().load(gift.getSenderAvatar()).resize(mAvatarSize, mAvatarSize).into(mAvatar);
-            Picasso.get().load(R.drawable.hot_girl_1).resize(mAvatarSize, mAvatarSize).into(mAvatar);
-            mDisplayName.setText(gift.getSenderName());
-            mDisplayGiftName.setText(gift.getGiftName());
+    private void setAvatar(ImageSource source) {
+        if (source.isPath()) {
+            Picasso.get().load(source.getPath()).resize(mAvatarSize, mAvatarSize).into(mAvatar);
+        } else if (source.isFile()) {
+            Picasso.get().load(source.getFile()).resize(mAvatarSize, mAvatarSize).into(mAvatar);
+        } else if (source.isUri()) {
+            Picasso.get().load(source.getUri()).resize(mAvatarSize, mAvatarSize).into(mAvatar);
+        } else if(source.isLocalResourceId()) {
+            Picasso.get().load(source.getResourceId()).resize(mAvatarSize, mAvatarSize).into(mAvatar);
+        }
+    }
+
+    public void setGiftInfo(ReceivingGiftInfo info) {
+        if (info != null) {
+            setAvatar(info.getSenderAvatar());
+            mDisplayName.setText(info.getSenderName());
+            mDisplayGiftName.setText(info.getGiftName());
         }
     }
 
@@ -104,17 +138,13 @@ public class GiftSenderAnimatedView extends FrameLayout {
         mAnimatorController = controller;
     }
 
-    public void animateGiftReceiving() {
+    public void animateReceivingGift() {
         if (mAnimatorController != null) {
-            mAnimatorController.animate(this);
+            if (mIsLayoutPassed) {
+                mAnimatorController.animate(this);
+            } else {
+                postDelayed(ANIMATOR, 1000);
+            }
         }
-    }
-
-    public ImageView getAvatarFlashLight() {
-        return mAvatarFlashLight;
-    }
-
-    public CircleImageView getAvatar() {
-        return mAvatar;
     }
 }

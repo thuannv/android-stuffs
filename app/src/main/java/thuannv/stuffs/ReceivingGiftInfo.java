@@ -5,11 +5,11 @@ package thuannv.stuffs;
  * @since 13/03/2018
  */
 
-public class GiftInfo {
+public class ReceivingGiftInfo {
 
     private String mSenderName;
 
-    private String mSenderAvatar;
+    private ImageSource mSenderAvatar;
 
     private String mGiftName;
 
@@ -21,19 +21,19 @@ public class GiftInfo {
         mSenderName = senderName;
     }
 
-    public String getSenderAvatar() {
-        return mSenderAvatar;
-    }
-
-    public void setSenderAvatar(String senderAvatar) {
-        mSenderAvatar = senderAvatar;
-    }
-
     public String getGiftName() {
         return mGiftName;
     }
 
     public void setGiftName(String giftName) {
         mGiftName = giftName;
+    }
+
+    public ImageSource getSenderAvatar() {
+        return mSenderAvatar;
+    }
+
+    public void setSenderAvatar(ImageSource senderAvatar) {
+        mSenderAvatar = senderAvatar;
     }
 }
