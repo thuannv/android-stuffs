@@ -1,6 +1,7 @@
 package thuannv.stuffs;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.view.View;
@@ -48,7 +49,7 @@ public final class GiftSenderAnimationController implements ViewAnimationControl
         return combineAnimator;
     }
 
-    public void animate(GiftSenderAnimatedView view) {
+    public void animate(final GiftSenderAnimatedView view, Animator.AnimatorListener listener) {
         if (view != null) {
             final AnimatorSet compoundAnimator = new AnimatorSet();
             final Animator f1 = animateFlashLightAndViewDisplay(view.mAvatarFlashLight, view.mAvatar);
@@ -57,6 +58,16 @@ public final class GiftSenderAnimationController implements ViewAnimationControl
             f2.setStartDelay(200);
             f3.setStartDelay(400);
 
+            if (listener != null) {
+                compoundAnimator.addListener(listener);
+            } else {
+                compoundAnimator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        view.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
             compoundAnimator.playTogether(f1, f2, f3);
             compoundAnimator.start();
         }

@@ -1,5 +1,7 @@
 package thuannv.stuffs;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
@@ -54,11 +56,18 @@ public class GiftSenderAnimatedView extends FrameLayout {
 
     private boolean mIsLayoutPassed = false;
 
+    private final Animator.AnimatorListener ANIMATION_LISTENER = new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            GiftSenderAnimatedView.this.setVisibility(INVISIBLE);
+        }
+    };
+
     private final Runnable ANIMATOR = new Runnable() {
         @Override
         public void run() {
             if (mAnimatorController != null) {
-                mAnimatorController.animate(GiftSenderAnimatedView.this);
+                mAnimatorController.animate(GiftSenderAnimatedView.this, ANIMATION_LISTENER);
             }
         }
     };
@@ -141,7 +150,7 @@ public class GiftSenderAnimatedView extends FrameLayout {
     public void animateReceivingGift() {
         if (mAnimatorController != null) {
             if (mIsLayoutPassed) {
-                mAnimatorController.animate(this);
+                mAnimatorController.animate(this, ANIMATION_LISTENER);
             } else {
                 postDelayed(ANIMATOR, 1000);
             }
